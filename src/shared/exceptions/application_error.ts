@@ -1,8 +1,9 @@
-import { BaseErrorProps } from "src/shared/types/base_error_props";
+import { type BaseErrorProps } from "src/shared/types/base_error_props";
 
 export enum ApplicationErrorCode {
   INVALID_CREDENTIALS = "INVALID_CREDENTIALS",
   VALIDATION_ERROR = "VALIDATION_ERROR",
+  EMAIL_ALREADY_EXISTS = "EMAIL_ALREADY_EXISTS",
 }
 
 export class ApplicationError extends Error {

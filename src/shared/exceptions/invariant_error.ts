@@ -1,11 +1,10 @@
-import { BaseErrorProps } from "src/shared/types/base_error_props";
+import { type BaseErrorProps } from "src/shared/types/base_error_props";
 
 export enum InvariantErrorCode {
-  // Value object creation
   INVALID_EMAIL_FORMAT = "INVALID_EMAIL_FORMAT",
-
-  // User
-  EMAIL_ALREADY_EXISTS = "EMAIL_ALREADY_EXISTS",
+  INVALID_PASSWORD_FORMAT = "INVALID_PASSWORD_FORMAT",
+  ROTATION_NOT_PERMITTED = "ROTATION_NOT_PERMITTED",
+  REVOCATION_NOT_PERMITTED = "REVOCATION_NOT_PERMITTED",
   ROLE_ASSIGNMENT_FAILED = "ROLE_ASSIGNMENT_FAILED",
 }
 

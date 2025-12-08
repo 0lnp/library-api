@@ -1,8 +1,13 @@
+import { type BaseSuccessfulResponse } from "src/shared/types/base_successful_response";
+import { type LoginBodyDTO, type RegisterBodyDTO } from "../dtos/auth_dto";
 import {
-  LoginResult,
-  RegisterResult,
-} from "src/application/dtos/authentication_dto";
-import { BaseSuccessfulResponse } from "src/shared/types/base_successful_response";
+  type UserRegisterDTO,
+  type UserRegisterResult,
+} from "src/application/dtos/user_register_dto";
+import {
+  type UserLoginDTO,
+  type UserLoginResult,
+} from "src/application/dtos/user_login_dto";
 
 export interface RegisterResponse {
   user_id: string;
@@ -14,8 +19,16 @@ export interface LoginResponse {
 }
 
 export class AuthMapper {
+  public static toRegisterRequest(body: RegisterBodyDTO): UserRegisterDTO {
+    return {
+      displayName: body.display_name,
+      email: body.email,
+      password: body.password,
+    };
+  }
+
   public static toRegisterResponse(
-    result: RegisterResult,
+    result: UserRegisterResult,
   ): BaseSuccessfulResponse<RegisterResponse> {
     return {
       data: {
@@ -24,8 +37,15 @@ export class AuthMapper {
     };
   }
 
+  public static toLoginRequest(body: LoginBodyDTO): UserLoginDTO {
+    return {
+      email: body.email,
+      password: body.password,
+    };
+  }
+
   public static toLoginResponse(
-    result: LoginResult,
+    result: UserLoginResult,
   ): BaseSuccessfulResponse<LoginResponse> {
     return {
       data: {

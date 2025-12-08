@@ -1,7 +1,7 @@
 import {
-  ArgumentsHost,
+  type ArgumentsHost,
   Catch,
-  ExceptionFilter,
+  type ExceptionFilter,
   HttpException,
   HttpStatus,
   InternalServerErrorException,
@@ -65,9 +65,19 @@ export class GlobalExceptionFilter implements ExceptionFilter {
             status: HttpStatus.BAD_REQUEST,
             message: exception.message,
           };
-        case InvariantErrorCode.EMAIL_ALREADY_EXISTS:
+        case InvariantErrorCode.INVALID_PASSWORD_FORMAT:
           return {
-            status: HttpStatus.CONFLICT,
+            status: HttpStatus.BAD_REQUEST,
+            message: exception.message,
+          };
+        case InvariantErrorCode.ROTATION_NOT_PERMITTED:
+          return {
+            status: HttpStatus.FORBIDDEN,
+            message: exception.message,
+          };
+        case InvariantErrorCode.REVOCATION_NOT_PERMITTED:
+          return {
+            status: HttpStatus.FORBIDDEN,
             message: exception.message,
           };
         case InvariantErrorCode.ROLE_ASSIGNMENT_FAILED:
@@ -82,15 +92,20 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof ApplicationError) {
       switch (exception.code) {
+        case ApplicationErrorCode.INVALID_CREDENTIALS:
+          return {
+            status: HttpStatus.UNAUTHORIZED,
+            message: exception.message,
+          };
         case ApplicationErrorCode.VALIDATION_ERROR:
           return {
             status: HttpStatus.BAD_REQUEST,
             message: exception.message,
             errors: exception.details,
           };
-        case ApplicationErrorCode.INVALID_CREDENTIALS:
+        case ApplicationErrorCode.EMAIL_ALREADY_EXISTS:
           return {
-            status: HttpStatus.UNAUTHORIZED,
+            status: HttpStatus.CONFLICT,
             message: exception.message,
           };
         default:

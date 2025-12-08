@@ -7,7 +7,7 @@ export const AppConfigSchema = z.object({
   DATABASE_PORT: z.coerce.number().default(5432),
   DATABASE_USER: z.string().default("postgres"),
   DATABASE_PASSWORD: z.string(),
-  DATABASE_NAME: z.string().default("cinema_api"),
+  DATABASE_NAME: z.string().default("cinema_db"),
 
   JWT_ACCESS_TOKEN_SECRET: z.string().min(20),
   JWT_ACCESS_TOKEN_LIFETIME: z.string().default("15m"),

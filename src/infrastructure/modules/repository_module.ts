@@ -1,20 +1,36 @@
 import { Module } from "@nestjs/common";
-import { USER_REPOSITORY_TOKEN } from "src/domain/repositories/user_repository";
-import { InMemoryUserRepository } from "../persistences/in_memory_user_repository";
-import { REFRESH_TOKEN_REPOSITORY_TOKEN } from "src/domain/repositories/refresh_token_repository";
-import { InMemoryRefreshTokenRepository } from "../persistences/in_memory_refresh_token_repository";
+import { UserRepository } from "src/domain/repositories/user_repository";
+import { TypeORMUserRepository } from "../persistences/typeorm_user_repository";
+import { TypeORMRefreshTokenRepository } from "../persistences/typeorm_refresh_token_repository";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { type AppConfig } from "../configs/app_config";
+import { RefreshTokenRepository } from "src/domain/repositories/refresh_token_repository";
+import { typeORMDataSourceOptions } from "../databases/typeorm_data_source";
+import { UserORMEntity } from "../databases/orm_entities/user_orm_entity";
+import { RefreshTokenORMEntity } from "../databases/orm_entities/refresh_token_orm_entity";
 
 @Module({
+  imports: [
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (config: ConfigService<AppConfig, true>) => {
+        return typeORMDataSourceOptions(config);
+      },
+      inject: [ConfigService],
+    }),
+    TypeOrmModule.forFeature([UserORMEntity, RefreshTokenORMEntity]),
+  ],
   providers: [
     {
-      provide: USER_REPOSITORY_TOKEN,
-      useValue: new InMemoryUserRepository(),
+      provide: UserRepository.name,
+      useClass: TypeORMUserRepository,
     },
     {
-      provide: REFRESH_TOKEN_REPOSITORY_TOKEN,
-      useValue: new InMemoryRefreshTokenRepository(),
+      provide: RefreshTokenRepository.name,
+      useClass: TypeORMRefreshTokenRepository,
     },
   ],
-  exports: [USER_REPOSITORY_TOKEN, REFRESH_TOKEN_REPOSITORY_TOKEN],
+  exports: [UserRepository.name, RefreshTokenRepository.name],
 })
 export class RepositoryModule {}
