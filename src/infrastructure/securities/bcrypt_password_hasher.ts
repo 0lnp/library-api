@@ -1,23 +1,32 @@
 import * as bcrypt from "bcrypt";
-import { PasswordHasher } from "src/domain/ports/password_hasher";
+import { type PasswordHasher } from "src/domain/ports/password_hasher";
+import {
+  InfrastructureError,
+  InfrastructureErrorCode,
+} from "src/shared/exceptions/infrastructure_error";
 
 export class BcryptPasswordHasher implements PasswordHasher {
   private static SALT_ROUNDS = 10;
 
   public async hash(plainPassword: string): Promise<string> {
     return new Promise((resolve, reject) => {
-      bcrypt.genSalt(BcryptPasswordHasher.SALT_ROUNDS, function (err, salt) {
-        if (err) {
-          return reject(err);
-        }
-
-        bcrypt.hash(plainPassword, salt, function (err, hash) {
-          if (err) {
-            return reject(err);
+      bcrypt.hash(
+        plainPassword,
+        BcryptPasswordHasher.SALT_ROUNDS,
+        (err, hash) => {
+          if (err !== undefined) {
+            reject(
+              new InfrastructureError({
+                code: InfrastructureErrorCode.PASSWORD_HASHING_FAILED,
+                message: err.message,
+                stack: err.stack,
+              }),
+            );
           }
-          return resolve(hash);
-        });
-      });
+
+          resolve(hash);
+        },
+      );
     });
   }
 
@@ -27,10 +36,16 @@ export class BcryptPasswordHasher implements PasswordHasher {
   ): Promise<boolean> {
     return new Promise((resolve, reject) => {
       bcrypt.compare(plainPassword, hashedPassword, function (err, result) {
-        if (err) {
-          return reject(err);
+        if (err !== undefined) {
+          reject(
+            new InfrastructureError({
+              code: InfrastructureErrorCode.PASSWORD_VERIFICATION_FAILED,
+              message: err.message,
+              stack: err.stack,
+            }),
+          );
         }
-        return resolve(result);
+        resolve(result);
       });
     });
   }
