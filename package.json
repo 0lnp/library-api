@@ -8,7 +8,9 @@
     "start:dev": "nest start --watch",
     "start:prod": "node .",
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest --config jest.config.json",
-    "test:cov": "NODE_OPTIONS='--experimental-vm-modules' jest --config jest.config.json --coverage"
+    "test:cov": "NODE_OPTIONS='--experimental-vm-modules' jest --config jest.config.json --coverage",
+    "migration:run": "dotenvx run -- typeorm-ts-node-commonjs migration:run -d src/infrastructure/databases/typeorm_data_source",
+    "migration:revert": "dotenvx run -- typeorm-ts-node-commonjs migration:revert -d src/infrastructure/databases/typeorm_data_source"
   },
   "keywords": [],
   "author": "",
@@ -29,6 +31,7 @@
     "zod": "^4.1.13"
   },
   "devDependencies": {
+    "@dotenvx/dotenvx": "^1.51.1",
     "@jest/globals": "^30.2.0",
     "@nestjs/cli": "^11.0.12",
     "@nestjs/schematics": "^11.0.9",
