@@ -109,7 +109,7 @@ export class GlobalExceptionFilter implements ExceptionFilter {
             message: exception.message,
           };
         case ApplicationErrorCode.INVALID_JWT_TOKEN:
-        case ApplicationErrorCode.JWT_EXPIRED:
+        case ApplicationErrorCode.EXPIRED_JWT_TOKEN:
         case ApplicationErrorCode.TOKEN_REUSE_DETECTED:
         case ApplicationErrorCode.INVALID_REFRESH_TOKEN:
           return {

@@ -2,8 +2,8 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 import { AppConfigSchema } from "../configs/app_config";
 import { APP_FILTER } from "@nestjs/core";
-import { GlobalExceptionFilter } from "src/presentation/filters/global_exception_filter";
-import { AuthModule } from "./auth_module";
+import { ControllerModule } from "./controller_module";
+import { GlobalExceptionFilter } from "../http/filters/global_exception_filter";
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { AuthModule } from "./auth_module";
       },
       isGlobal: true,
     }),
-    AuthModule,
+    ControllerModule,
   ],
   providers: [
     {
